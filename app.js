@@ -1,13 +1,31 @@
 const express = require("express");
+const cors = require("cors");
 
+// Starting the express app
 const app = express();
 
-const PORT = process.env.PORT || 8000;
+//////// Global Middlewares ////////
+
+// Implement cors
+app.use(cors());
+
+// Body parser
+app.use(
+  express.json({
+    limit: "10kb",
+  })
+);
+
+app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 
 app.get("/", (req, res) => {
-  res.send(`Hello from the server side on port ${PORT}`);
+  res.send("Hello from the server");
 });
 
-app.listen(PORT, () => {
-  console.log(`App is running on port ${PORT}`);
+const port = process.env.PORT || 8000;
+
+app.listen(port, () => {
+  console.log(`App running on port ${port}`);
 });
+
+module.exports = app;
