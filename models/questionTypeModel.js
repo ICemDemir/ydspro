@@ -19,6 +19,10 @@ const questionTypeSchema = new mongoose.Schema({
   },
 });
 
-const QuestionType = mongoose.model("QuestionType", questionTypeSchema);
+const QuestionType = mongoose.model(
+  "QuestionType",
+  questionTypeSchema,
+  "questiontypes"
+);
 
-exports.module = QuestionType;
+module.exports = QuestionType;

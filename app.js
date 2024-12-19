@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const grammarRouter = require("./routes/grammarRoutes");
+const questionTypeRouter = require("./routes/questionTypeRoutes");
 
 // Starting the express app
 const app = express();
@@ -29,5 +30,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/v1/grammar", grammarRouter);
+app.use("/api/v1/questiontypes", questionTypeRouter);
 
 module.exports = app;
