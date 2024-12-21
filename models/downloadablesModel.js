@@ -15,7 +15,7 @@ const downloadablesSchema = new mongoose.Schema({
   },
   filePath: {
     type: String,
-    required: [true, "A downloadable file must have a file path"],
+    // required: [true, "A downloadable file must have a file path"],
   },
   uploadAt: {
     type: Date,
@@ -23,6 +23,6 @@ const downloadablesSchema = new mongoose.Schema({
   },
 });
 
-const Downloadables = mongoose.model("Downloadables", [downloadablesSchema]);
+const Downloadables = mongoose.model("Downloadables", downloadablesSchema);
 
 module.exports = Downloadables;
