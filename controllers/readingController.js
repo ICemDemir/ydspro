@@ -1,92 +1,63 @@
+const AppError = require("../utils/appError");
+const catchAsync = require("../utils/catchAsync");
 const Reading = require("./../models/readingModel");
 
-exports.getAllReading = async (req, res) => {
-  try {
-    const Readings = await Reading.find();
+exports.getAllReading = catchAsync(async (req, res, next) => {
+  const Readings = await Reading.find();
 
-    res.status(200).json({
-      status: "success",
-      results: Readings.length,
-      data: Readings,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
+  res.status(200).json({
+    status: "success",
+    results: Readings.length,
+    data: Readings,
+  });
+});
+
+exports.getReading = catchAsync(async (req, res, next) => {
+  const theReading = await Reading.findById(req.params.id);
+
+  if (!theReading) {
+    return next(new AppError("No reading document found with that id", 404));
   }
-};
 
-exports.getReading = async (req, res) => {
-  try {
-    const theReading = await Reading.findById(req.params.id);
+  res.status(200).json({
+    status: "success",
+    data: theReading,
+  });
+});
 
-    res.status(200).json({
-      status: "success",
-      data: theReading,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+exports.createReading = catchAsync(async (req, res, next) => {
+  const newReading = await Reading.create(req.body);
 
-exports.createReading = async (req, res) => {
-  try {
-    const newReading = await Reading.create(req.body);
+  res.status(201).json({
+    status: "success",
+    message: "New reading created",
+    data: newReading,
+  });
+});
 
-    res.status(201).json({
-      status: "success",
-      message: "New reading created",
-      data: newReading,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+exports.updateReading = catchAsync(async (req, res, next) => {
+  const updatedReading = await Reading.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
-exports.updateReading = async (req, res) => {
-  try {
-    const updatedReading = await Reading.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+  res.status(200).json({
+    status: "success",
+    message: "Reading updated",
+    data: { updatedReading },
+  });
+});
 
-    res.status(200).json({
-      status: "success",
-      message: "Reading updated",
-      data: { updatedReading },
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+exports.deleteReading = catchAsync(async (req, res, next) => {
+  await Reading.findByIdAndDelete(req.params.id);
 
-exports.deleteReading = async (req, res) => {
-  try {
-    await Reading.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({
-      status: "success",
-      message: "Reading deleted",
-      data: null,
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: "fail",
-      message: err,
-    });
-  }
-};
+  res.status(200).json({
+    status: "success",
+    message: "Reading deleted",
+    data: null,
+  });
+});

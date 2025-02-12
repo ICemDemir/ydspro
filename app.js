@@ -2,6 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 
+const AppError = require("./utils/appError");
+const globalErrorHandler = require("./controllers/errorController");
 const grammarRouter = require("./routes/grammarRoutes");
 const questionTypeRouter = require("./routes/questionTypeRoutes");
 const downloadablesRouter = require("./routes/downloadablesRoutes");
@@ -38,5 +40,11 @@ app.use("/api/v1/questiontypes", questionTypeRouter);
 app.use("/api/v1/downloadables", downloadablesRouter);
 app.use("/api/v1/reading", readingRouter);
 app.use("/api/v1/vocabulary", vocabularyRouter);
+
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+});
+
+app.use(globalErrorHandler);
 
 module.exports = app;
