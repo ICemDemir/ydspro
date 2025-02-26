@@ -5,6 +5,7 @@ const grammarSchema = new mongoose.Schema({
     type: String,
     required: [true, "A grammar subject must have a name"],
     unique: true,
+    minLength: [5, "A grammar subject must at least have 5 characters"],
   },
   description: {
     type: String,
